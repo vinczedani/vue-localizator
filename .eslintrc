@@ -1,0 +1,10 @@
+{
+  "extends": "airbnb-base",
+  "plugins": [
+    "mocha"
+  ],
+  "rules": {
+    "import/prefer-default-export": false,
+    "mocha/no-exclusive-tests": "error"
+  }
+}

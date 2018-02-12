@@ -4,6 +4,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+hiddenTest
 
 # Runtime data
 pids
@@ -31,8 +32,6 @@ bower_components
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
-dist
-hiddenTest
 
 # Dependency directories
 node_modules/
