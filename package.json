@@ -1,15 +1,13 @@
 {
   "name": "vue-localizator",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Just another translate package for vue.js",
   "main": "dist/index.js",
   "scripts": {
-    "test": "npm run lint && npm run cover",
+    "test": "npm run lint",
     "lint": "eslint src",
     "cover": "",
-    "karma": "karma start karma.conf.js",
-    "mocha": "mocha --require babel-register test/**/*.spec.js",
-    "publish": "npm run build && npm publish",
+    "publishToNpm": "npm run test && npm run build && npm publish",
     "build": "babel src -d dist -s"
   },
   "repository": {

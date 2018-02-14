@@ -1,21 +1,18 @@
-import { deepGet } from './utils';
+import { deepGet, mergeDeep } from './utils';
 import { createFilter } from './filter';
 import { applyMixin, bus } from './mixin';
-import { logger } from './logger';
+import { Logger } from './logger';
 
-const OPEN_ELEMENT = '{%';
-const CLOSE_ELEMENT = '%}';
-
-function onlyUnique(value, index, self) { 
-  return self.indexOf(value) === index;
+function refreshTranslations() {
+  bus.$emit('localizator-update');
 }
 
 export class Localizator {
   constructor({ language, dictionary, preventFallback = false } = {}) {
-    const userLang = navigator.language || navigator.userLanguage;
-    
+    const userLang = navigator.language || navigator.userLanguage; // eslint-disable-line no-undef
+
     this.language = language || userLang.substring(0, 2) || 'en';
-    this._dictionary = dictionary || {};
+    this.dictionary = dictionary || {};
     this.preventFallback = preventFallback;
   }
 
@@ -24,27 +21,41 @@ export class Localizator {
     createFilter(Vue, localizatorInstance);
   }
 
-  setLanguage(newLanguage) {
-    this.language = newLanguage;
-    bus.$emit('lang-changed', newLanguage);
+  // public
+  expandDictionary(newDictionary) {
+    this.dictionary = mergeDeep(this.dictionary, newDictionary);
+    refreshTranslations();
   }
 
+  // public
+  setLanguage(newLanguage) {
+    this.language = newLanguage;
+    refreshTranslations();
+  }
+
+  // public
   translate(key, language = this.language) {
-    if (!this._dictionary[language]) {
-      logger.warn(`Requested translate language ${language} is missing!`);
-      const fallbackLanguage = Object.keys(this._dictionary)[0];
-      logger.warn(`Fallback language is ${fallbackLanguage}`);
+    const fallbackLanguage = Object.keys(this.dictionary)[0];
+
+    if (!this.dictionary[language]) {
+      Logger.warn(`Requested translate language ${language} is missing!`);
+      Logger.warn(`Fallback language is ${fallbackLanguage}`);
       if (this.preventFallback) {
-        return;
+        return key;
       }
-      language = fallbackLanguage;
+      return this.translate(key, fallbackLanguage);
     }
-    const lang = this._dictionary[language];
-    if (!lang[key]) {
-      logger.warn(`${key} not found in ${language}`);
-      return;
-    }
+    const lang = this.dictionary[language];
     const result = deepGet(lang, key, key);
+
+    if (result === key) {
+      Logger.warn(`${key} not found in ${language}!`);
+      if (!this.preventFallback) {
+        Logger.warn(`Trying with ${fallbackLanguage}.`);
+        return this.translate(key, fallbackLanguage);
+      }
+    }
+
     return result;
   }
 }

@@ -1,4 +1,4 @@
-export function deepGet (obj, propsString, defaultValue) {
+export function deepGet(obj, propsString, defaultValue) {
   const props = propsString.split('.');
   // If we have reached an undefined/null property
   // then stop executing and return the default value.
@@ -18,4 +18,37 @@ export function deepGet (obj, propsString, defaultValue) {
   const remainingProps = props.slice(1);
 
   return deepGet(foundSoFar, remainingProps.join('.'), defaultValue);
+}
+
+
+/**
+ * Simple object check.
+ * @param item
+ * @returns {boolean}
+ */
+export function isObject(item) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+/**
+ * Deep merge two objects.
+ * @param target
+ * @param ...sources
+ */
+export function mergeDeep(target, ...sources) {
+  if (!sources.length) return target;
+  const source = sources.shift();
+
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).map((key) => { // eslint-disable-line array-callback-return
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} });
+        mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    });
+  }
+
+  return mergeDeep(target, ...sources);
 }

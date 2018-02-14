@@ -1,4 +1,4 @@
-export let bus = {};
+export let bus = {}; // eslint-disable-line import/no-mutable-exports
 
 function init() {
   const options = this.$options;
@@ -21,19 +21,9 @@ export function applyMixin(Vue) {
 
   Vue.mixin({
     beforeCreate: init,
-    data() {
-      return {
-        localizatorLanguage: this.$localizator.language,
-      };
-    },
-    watch: {
-      localizatorLanguage(newLanguage) {
-        this.$forceUpdate();
-      }
-    },
     mounted() {
-      bus.$on('lang-changed', (newLanguage) => {
-        this.localizatorLanguage = newLanguage;
+      bus.$on('localizator-update', () => {
+        this.$forceUpdate();
       });
     },
   });
