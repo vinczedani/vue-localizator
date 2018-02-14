@@ -21,10 +21,13 @@ export function applyMixin(Vue) {
 
   Vue.mixin({
     beforeCreate: init,
-    mounted() {
-      bus.$on('localizator-update', () => {
-        this.$forceUpdate();
-      });
-    },
   });
 }
+
+export const localizatorMixin = {
+  mounted() {
+    bus.$on('localizator-update', () => {
+      this.$forceUpdate();
+    });
+  },
+};
