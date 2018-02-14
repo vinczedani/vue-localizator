@@ -22,6 +22,11 @@ export class Localizator {
   }
 
   // public
+  getAvailableLanguages() {
+    return Object.keys(this.dictionary);
+  }
+
+  // public
   expandDictionary(newDictionary) {
     this.dictionary = mergeDeep(this.dictionary, newDictionary);
     refreshTranslations();

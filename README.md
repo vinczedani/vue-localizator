@@ -56,6 +56,9 @@ export default {
       // translates to a requested language
       // defaults language is the currently set language
       const newInHungarian = this.$localizator.translate('NEW', 'hu');
+
+      // returns ['en', 'hu']
+      const languages = this.$localizator.getAvailableLanguages();
     },
   },
 };
