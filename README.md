@@ -4,15 +4,6 @@ Just another translate package for vue.js
 # Install
 ```npm install vue-localizator```
 
-You need to use the mixin so your components update dynamically!
-If you want to use the mixin as a global mixin. you can call the following.
-```javascript
-import { localizatorMixin } from 'vue-localizator';
-
-Vue.mixin(localizatorMixin);
-```
-This will affect every single component of yours to update on language change or dictionary update.
-
 # Usage
 In main.js
 ```javascript
@@ -69,3 +60,11 @@ export default {
   },
 };
 ```
+You need to use the mixin so your components update dynamically!
+If you want to use the mixin as a global mixin. you can call the following.
+```javascript
+import { localizatorMixin } from 'vue-localizator';
+
+Vue.mixin(localizatorMixin); // THIS IS DISCOURAGED!
+```
+This will affect every single component of yours to update on language change or dictionary update.
