@@ -39,25 +39,25 @@ export class Localizator {
   }
 
   // public
-  translate(key, language = this.language) {
+  translate(key, language = this.language, preventFallback = false) {
     const fallbackLanguage = Object.keys(this.dictionary)[0];
 
     if (!this.dictionary[language]) {
       Logger.warn(`Requested translate language ${language} is missing!`);
       Logger.warn(`Fallback language is ${fallbackLanguage}`);
-      if (this.preventFallback) {
+      if (this.preventFallback || preventFallback) {
         return key;
       }
-      return this.translate(key, fallbackLanguage);
+      return this.translate(key, fallbackLanguage, true);
     }
     const lang = this.dictionary[language];
     const result = deepGet(lang, key, key);
 
     if (result === key) {
       Logger.warn(`${key} not found in ${language}!`);
-      if (!this.preventFallback) {
+      if (!this.preventFallback && !preventFallback) {
         Logger.warn(`Trying with ${fallbackLanguage}.`);
-        return this.translate(key, fallbackLanguage);
+        return this.translate(key, fallbackLanguage, true);
       }
     }
 

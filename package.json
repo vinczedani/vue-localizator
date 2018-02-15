@@ -1,6 +1,6 @@
 {
   "name": "vue-localizator",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Just another translate package for vue.js",
   "main": "dist/index.js",
   "scripts": {
